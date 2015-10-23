@@ -59,7 +59,7 @@ class Player
 	def explode_bombs(bombs)
 		bombs.reject! do |bomb|
 			if Gosu::distance(@x, @y, bomb.x, bomb.y) < 35 then
-				@score -= 50
+				@score -= 100
 				@explosion.play
 				true
 			else
