@@ -1,5 +1,6 @@
 require_relative "star"
 require_relative "bomb"
+require_relative "laser"
 require_relative "zorder"
 
 class Player
@@ -46,7 +47,7 @@ class Player
 
 	def collect_stars(stars)
 		stars.reject! do |star|
-			if Gosu::distance(@x, @y, star.x, star.y) < 35 then
+			if collided?(star, 35) then
 				@score += 10
 				@beep.play
 				true
@@ -58,8 +59,8 @@ class Player
 
 	def explode_bombs(bombs)
 		bombs.reject! do |bomb|
-			if Gosu::distance(@x, @y, bomb.x, bomb.y) < 35 then
-				@score -= 100
+			if collided?(bomb, 50) && bomb.fuse_out then
+				@score -= 500
 				@explosion.play
 				true
 			else
@@ -71,4 +72,10 @@ class Player
 	def draw
 		@image.draw_rot(@x, @y, 1, @angle)
 	end
+
+	private
+
+		def collided?(object, distance)
+			Gosu::distance(@x, @y, object.x, object.y) < distance
+		end
 end
